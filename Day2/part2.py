@@ -1,31 +1,29 @@
-ranges = []
-with open('Day2/input.txt', 'r') as file:
+
+banks = []
+
+with open('Day3/input.txt', 'r') as file:
     for line in file:
-        inputs = line.split(',')
-        for input in inputs:
-            ranges.append(input)
+        bank = []
+        for char in line:
+            if char != '\n':
+                bank.append(int(char))
+        banks.append(bank)
 
 n = 0
+maxIdx = -1
 
-for ranged in ranges:
-    input = ranged.split("-")
-    start = int(input[0])
-    end = int(input[1])
-    for i in range(start, end + 1):
-        i_string = str(i)
-        chain = ""
-        for char in i_string:
-            valid = True
-            chain += char
-            if len(chain) != len(i_string):
-                for chr in i_string.split(chain):
-                    if chr != '':
-                        valid = False
-                if valid == True:
-                    n += i
-                    break
-                
-
-            
+for bank in banks:
+    num = 0
+    maxIdx = -1
+    for i in range(0, 12):
+        if i != 11:
+            maxItem = max(enumerate(bank[maxIdx + 1:-(11-i)]), key=lambda x: x[1])
+        else:
+            maxItem = max(enumerate(bank[maxIdx + 1:]), key=lambda x: x[1])
+        maxNum= maxItem[1]
+        maxIdx = maxItem[0] + maxIdx + 1
+        num += (maxNum * (10**(11-i)))
+    n += num
 
 print(n)
+
